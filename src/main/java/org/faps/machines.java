@@ -1,16 +1,16 @@
 package org.faps;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 public class machines {
 
-    @JsonProperty("name")   
+     
     String name;
-    @JsonProperty("carTime")  
+     
     int carTime;
-    @JsonProperty("truckTime")  
+     
     int truckTime;
-    @JsonProperty("changeTime")  
+    
     float changeTime;
     
      
@@ -28,6 +28,7 @@ public class machines {
     }
 
 
+
     public String getName() {
          return this.name;
     }
@@ -41,7 +42,7 @@ public class machines {
     }
 
     public void setCarTime(int carTime) {
-         this.carTime = 2;
+         this.carTime = carTime;
     }
 
     public int getTruckTime() {
@@ -49,7 +50,7 @@ public class machines {
     }
 
     public void setTruckTime(int truckTime) {
-         this.truckTime = 4;
+         this.truckTime = truckTime;
     }
 
     public float getChangeTime() {
@@ -57,7 +58,7 @@ public class machines {
     }
 
     public void setChangeTime(int changeTime) {
-         this.changeTime = 0.5f;
+         this.changeTime = changeTime;
     }
 
 }
