@@ -1,7 +1,5 @@
 package org.faps;
 
-
-
 public class machines {
 
      
@@ -41,24 +39,24 @@ public class machines {
          return this.carTime;
     }
 
-    public void setCarTime(int carTime) {
-         this.carTime = carTime;
+    public int setCarTime(int carTime) {
+         return 2;
     }
 
     public int getTruckTime() {
          return this.truckTime;
     }
 
-    public void setTruckTime(int truckTime) {
-         this.truckTime = truckTime;
+    public int setTruckTime(int truckTime) {
+         return 4;
     }
 
     public float getChangeTime() {
          return this.changeTime;
     }
 
-    public void setChangeTime(int changeTime) {
-         this.changeTime = changeTime;
+    public float setChangeTime(int changeTime) {
+         return 0.5f;
     }
 
 }

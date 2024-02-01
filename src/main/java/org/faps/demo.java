@@ -5,32 +5,42 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-
-import java.time.Duration;
-import java.util.Scanner;
 
 
 @Path("/times")
 public class demo {
 
-    private StringBuilder result = new StringBuilder();
+    StringBuilder result = new StringBuilder();
     private boolean stopAppending = false;
-
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public void seeorder(){
+    public Response seeorder(){
 
-        System.out.println(result);
+         return Response.ok(result.toString()).build() ;
+
     }
+
+/* --------------------------------------------------------------------------- */
+
+   /*  @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public int getTotalTime(){
+
+        return 0 ;
+          
+    } */
+
+    /* --------------------------------------------------------------------------- */
 
     @POST
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String postOrder(String input) {
+    public String postOrder(String input)
+    {
+        
         if (!stopAppending) {
             result.append(input);
 
@@ -39,11 +49,14 @@ public class demo {
                 stopAppending = true;
             }
         }
-
-        return result.toString();
+         return result.toString();
+         
         
-    }
+        
+    }  
+
 }
+
 
 
         

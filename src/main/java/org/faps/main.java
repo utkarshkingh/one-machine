@@ -1,15 +1,16 @@
 package org.faps;
 
 import java.util.Scanner;
-import java.util.Arrays;
+
 
 public class main {
+    
 
+    
     public static void main(String[] args) {
 
         stringer();
-        Totaltime time = new Totaltime();
-        int Rtime=time.RequiredTime();
+          
                
     }
 

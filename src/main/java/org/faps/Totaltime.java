@@ -4,42 +4,47 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.GET;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 
-import java.time.Duration;
-import java.util.Scanner;
 
 
+@Path("/total")
 public class Totaltime  {
 
     
     private int elapsedTime = 0;
 
-    main obj=new main();
-    char[] order=obj.getArray();
+    machines obj=new machines();
+     
 
-    machines machine = new machines();
+    private StringBuilder result = new StringBuilder();
+    private char[] order;
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
 
     public int RequiredTime()  {
         int requiredTime = 0;
         char lastVehicle = ' ';
+        
 
-        for (int i = 0; i < order.length; i++) {
-            char vehicle = order[i];
+        for (int i = 0; i < result.toString().toCharArray().length; i++) {
+            char vehicle = result.toString().toCharArray()[i];
+            
 
-            if (vehicle == 'c') {
-                requiredTime += 2;
+            if (vehicle == 'c') { 
+                requiredTime +=obj.getCarTime();
             } else if (vehicle == 't') {
-                requiredTime += 4;
+                requiredTime += obj.getTruckTime();
             }
 
             if (i > 0 && lastVehicle != ' ' && lastVehicle != vehicle) {
-                requiredTime += 0.5f;
+                requiredTime += obj.getChangeTime();
             }
 
-            lastVehicle = vehicle;
+            lastVehicle = vehicle; 
         }
         
         System.out.println("Total required time for the sequence = " +requiredTime);
