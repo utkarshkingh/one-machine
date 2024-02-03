@@ -12,14 +12,14 @@ import jakarta.ws.rs.Path;
 @Path("/times")
 public class demo {
 
-    StringBuilder result = new StringBuilder();
-    private boolean stopAppending = false;
+    static StringBuilder result = new StringBuilder();
+    private static boolean stopAppending = false;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response seeorder(){
 
-         return Response.ok(result.toString()).build() ;
+         return Response.ok("Your orders are :"+result.toString()).build() ;
 
     }
 
@@ -38,7 +38,7 @@ public class demo {
     @POST
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String postOrder(String input)
+    public static char[] postOrder(String input)
     {
         
         if (!stopAppending) {
@@ -49,30 +49,12 @@ public class demo {
                 stopAppending = true;
             }
         }
-         return result.toString();
+
+        
+         return result.toString().toCharArray();
          
         
         
     }  
 
 }
-
-
-
-        
-
-
-
-        
-
-        
-
-
-         
-      
-    
-    
-    
-
-
-

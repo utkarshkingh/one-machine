@@ -13,25 +13,22 @@ import jakarta.ws.rs.Path;
 @Path("/total")
 public class Totaltime  {
 
-    
-    private int elapsedTime = 0;
 
     machines obj=new machines();
-     
 
-    private StringBuilder result = new StringBuilder();
-    private char[] order;
+    demo result2 = new demo();
+    char[]okResult = demo.result.toString().toCharArray(); 
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-
     public int RequiredTime()  {
         int requiredTime = 0;
         char lastVehicle = ' ';
         
+        
 
-        for (int i = 0; i < result.toString().toCharArray().length; i++) {
-            char vehicle = result.toString().toCharArray()[i];
+        for (int i = 0; i < okResult.length; i++) {
+            char vehicle = okResult[i];
             
 
             if (vehicle == 'c') { 
@@ -48,7 +45,6 @@ public class Totaltime  {
         }
         
         System.out.println("Total required time for the sequence = " +requiredTime);
-        elapsedTime = requiredTime;
         return requiredTime;
         
     }

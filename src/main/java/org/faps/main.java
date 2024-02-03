@@ -10,8 +10,7 @@ public class main {
     public static void main(String[] args) {
 
         stringer();
-          
-               
+                      
     }
 
     public static char[] stringer() {
