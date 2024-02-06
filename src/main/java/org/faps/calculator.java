@@ -34,18 +34,56 @@ public class calculator {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
                 public void run() {
-                    // Process order here
+                    
                     System.out.println("Processing order for vehicle: " + vehicle);
-                    obj.status = true; // Set the machine status to free after processing
+                    obj.status = true; 
                     timer.cancel();
                 }
             };
-            timer.schedule(task, calculateProcessingTime(vehicle));
-            obj.status = false; // Set the machine status to busy
+            timer.schedule(task, calculateTotalTimeForAllOrders());
+            obj.status = false; 
         }
     }
 
 
+@GET
+@Path("/total")
+@Produces(MediaType.TEXT_PLAIN)
+public Response totalTime() {
+    
+    int requiredTime = calculateTotalTimeForAllOrders();
+    return Response.ok("Your total time is: " + requiredTime).build();
+}
+
+private int calculateTotalTimeForAllOrders() {
+    int requiredTime = 0;
+    char lastVehicle = ' ';
+    
+   
+    for (int i = 0; i < result.length(); i++) {
+        char vehicle = result.charAt(i);
+
+        
+        if (vehicle == 'c') {
+            requiredTime += obj.getCarTime();
+        } else if (vehicle == 't') {
+            requiredTime += obj.getTruckTime();
+        }
+
+        
+        if (i > 0 && lastVehicle == 'c' && vehicle == 't') {
+            requiredTime += obj.getChangeTime();
+        }
+
+        lastVehicle = vehicle;
+    }
+
+    return requiredTime;
+}
+
+
+
+    /* 
     @GET
     @Path("/total")
     @Produces(MediaType.TEXT_PLAIN)
@@ -77,30 +115,30 @@ public class calculator {
         return Response.ok("Your total time is :"+ requiredTime).build() ;
         
         
-    }
+    }    */
 
     @POST
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
-    public  String postOrder(String input) {
-
-
+    public Response postOrder(String input) {
         if (!stopAppending) {
-            
+            if (!obj.isFree()) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Machine is busy. Please try again later.").build();
+            }
+    
+    
             result.append(input);
-
-            // Check if the input contains the character 'x'
-            if (input.contains("x")) { 
+    
+            
+            if (input.contains("x")) {
                 
                 stopAppending = true;
-                
             }
+    
+            return Response.ok("Order received: " + input).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Orders cannot be accepted at this time.").build();
         }
-        
-        return result.toString();
-        
-
     }
-
 }
 

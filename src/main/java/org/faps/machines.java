@@ -33,8 +33,6 @@ public class machines {
      return status;
  }
 
-
-
     public String getName() {
          return this.name;
     }
@@ -48,7 +46,7 @@ public class machines {
     }
 
     public int setCarTime(int carTime) {
-         return 2;
+         return 2000;
     }
 
     public int getTruckTime() {
@@ -56,7 +54,7 @@ public class machines {
     }
 
     public int setTruckTime(int truckTime) {
-         return 4;
+         return 4000;
     }
 
     public float getChangeTime() {
@@ -64,7 +62,7 @@ public class machines {
     }
 
     public float setChangeTime(int changeTime) {
-         return 0.5f;
+         return 500f;
     }
 
 }
