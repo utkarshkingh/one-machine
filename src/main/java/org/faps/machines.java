@@ -46,7 +46,7 @@ public class machines {
     }
 
     public int setCarTime(int carTime) {
-         return 2000;
+         return 9000;
     }
 
     public int getTruckTime() {
@@ -54,7 +54,7 @@ public class machines {
     }
 
     public int setTruckTime(int truckTime) {
-         return 4000;
+         return 10000;
     }
 
     public float getChangeTime() {
@@ -62,7 +62,7 @@ public class machines {
     }
 
     public float setChangeTime(int changeTime) {
-         return 500f;
+         return 5000f;
     }
 
 }

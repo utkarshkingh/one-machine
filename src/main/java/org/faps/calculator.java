@@ -17,7 +17,7 @@ public class calculator {
      StringBuilder result = new StringBuilder();
      boolean stopAppending = false;
      machines obj = new machines("machine1" ,2,4,0.5f,true);
-
+    
     
 
     @GET
@@ -28,8 +28,8 @@ public class calculator {
 
     }
 
-
-    public void processOrder(char vehicle) {
+/* 
+    public Response processOrder(char vehicle) {
         if (obj.status) {
             Timer timer = new Timer();
             TimerTask task = new TimerTask() {
@@ -38,47 +38,68 @@ public class calculator {
                     System.out.println("Processing order for vehicle: " + vehicle);
                     obj.status = true; 
                     timer.cancel();
+                
                 }
             };
-            timer.schedule(task, calculateTotalTimeForAllOrders());
-            obj.status = false; 
+            timer.schedule(task, calculateTotalTimeForLastItem());
+            obj.status=false;
+
         }
+        return Response.ok("Machine busy").build()  ;
     }
 
+    */
 
-@GET
-@Path("/total")
-@Produces(MediaType.TEXT_PLAIN)
-public Response totalTime() {
+
+    @GET
+    @Path("/total")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response Totaltime()  {
+
+
     
-    int requiredTime = calculateTotalTimeForAllOrders();
-    return Response.ok("Your total time is: " + requiredTime).build();
-}
+        int requiredTime = 0;
+        char lastVehicle = ' ';
+           
+        for (int i = 0; i < result.toString().toCharArray().length; i++) {
+            char vehicle = result.toString().toCharArray()[i];
+                       
+           if (vehicle == 'c' && obj.status==true  ) {
 
-private int calculateTotalTimeForAllOrders() {
-    int requiredTime = 0;
-    char lastVehicle = ' ';
-    
-   
-    for (int i = 0; i < result.length(); i++) {
-        char vehicle = result.charAt(i);
+                requiredTime =obj.getCarTime();
+                               
+            } else if (vehicle == 't') {
+                requiredTime += obj.getTruckTime();
+            }
 
-        
-        if (vehicle == 'c') {
-            requiredTime += obj.getCarTime();
-        } else if (vehicle == 't') {
-            requiredTime += obj.getTruckTime();
+            if (i > 0 && lastVehicle != ' ' && lastVehicle != vehicle) {
+                requiredTime += obj.getChangeTime();
+            }
+
+            lastVehicle = vehicle; 
         }
-
         
-        if (i > 0 && lastVehicle == 'c' && vehicle == 't') {
-            requiredTime += obj.getChangeTime();
-        }
-
-        lastVehicle = vehicle;
+        return Response.ok("Your total time is :"+ requiredTime).build() ;
+        
+        
     }
 
-    return requiredTime;
+private int calculateTotalTimeForLastItem() {
+    int thisTime = 0;
+    char lastVehicle = result.charAt(result.length() - 1); 
+
+    if (lastVehicle == 'c') {
+        thisTime += obj.getCarTime();
+    } else if (lastVehicle == 't') {
+        thisTime += obj.getTruckTime();
+    }
+
+    
+    if (result.length() >= 2 && result.charAt(result.length() - 2) == 'c' && lastVehicle == 't') {
+        thisTime +=  obj.getChangeTime() ; 
+    }
+
+    return thisTime;
 }
 
 
@@ -117,28 +138,36 @@ private int calculateTotalTimeForAllOrders() {
         
     }    */
 
-    @POST
-    @Path("/postorder")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response postOrder(String input) {
-        if (!stopAppending) {
-            if (!obj.isFree()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Machine is busy. Please try again later.").build();
-            }
-    
-    
-            result.append(input);
-    
-            
-            if (input.contains("x")) {
+@POST
+@Path("/postorder")
+@Consumes(MediaType.TEXT_PLAIN)
+public Response postOrder(String input) {
+    if (!stopAppending) {
+        if (obj.status==false) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Machine is busy. Please try again later.").build();
+        }
+
+        result.append(input); 
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
                 
-                stopAppending = true;
+                obj.status=false; 
+                timer.cancel();                
             }
-    
-            return Response.ok("Order received: " + input).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Orders cannot be accepted at this time.").build();
+        };
+      
+        timer.schedule(task,calculateTotalTimeForLastItem());
+        obj.status=true; 
+
+       
+        if (input.contains("x")) {
+            stopAppending = true;
         }
     }
+
+    return Response.ok("Order received: " + input).build(); 
+}
 }
 
