@@ -10,20 +10,28 @@ public class machines {
     int truckTime;
     
     float changeTime;
+
+    boolean status = true;  //true = machine free
+    
     
      
     public machines(){
 
     }                                        
 
-    public machines(String name,int carTime,int truckTime,float changeTime) {
+    public machines(String name,int carTime,int truckTime,float changeTime,boolean status) {
 
          this.name = name;
          this.carTime= carTime;
          this.truckTime=truckTime;
          this.changeTime=changeTime;
+         this.status=status;
 
     }
+
+    public boolean isFree() {
+     return status;
+ }
 
 
 

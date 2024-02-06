@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import java.util.Timer;
 
 
 @Path("/calculate")
@@ -25,13 +26,15 @@ public class calculator {
 
     }
 
+
     @GET
     @Path("/total")
     @Produces(MediaType.TEXT_PLAIN)
     public Response Totaltime()  {
 
     
-    machines obj = new machines("machine1" ,2,4,0.5f);
+    machines obj = new machines("machine1" ,2,4,0.5f,true);
+
 
     
         int requiredTime = 0;
@@ -39,16 +42,21 @@ public class calculator {
            
         for (int i = 0; i < result.toString().toCharArray().length; i++) {
             char vehicle = result.toString().toCharArray()[i];
-            
+                       
+           if (vehicle == 'c' && obj.status==true  ) {
 
-            if (vehicle == 'c') { 
-                requiredTime +=2;
+                requiredTime =obj.getCarTime();
+                else(System.currentTimeMillis()){
+
+
+                }
+               
             } else if (vehicle == 't') {
-                requiredTime += 4;
+                requiredTime += obj.getTruckTime();
             }
 
             if (i > 0 && lastVehicle != ' ' && lastVehicle != vehicle) {
-                requiredTime += 0.5f;
+                requiredTime += obj.getChangeTime();
             }
 
             lastVehicle = vehicle; 
@@ -62,15 +70,16 @@ public class calculator {
     @POST
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
-    public String postOrder(String input) {
+    public  String postOrder(String input) {
 
 
         if (!stopAppending) {
+            long startTime = System.currentTimeMillis();
             result.append(input);
 
             // Check if the input contains the character 'x'
             if (input.contains("x")) { 
-                
+                long stopTime = System.currentTimeMillis();
                 stopAppending = true;
                 
             }
