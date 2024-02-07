@@ -16,7 +16,7 @@ public class process {
 
      StringBuilder result = new StringBuilder();
      boolean stopAppending = false;
-     machines obj = new machines("machine1" ,2,4,0.5f,true);
+     machines obj = new machines("machine1" ,4,7,1,true);
     
     
 
@@ -27,29 +27,6 @@ public class process {
          return Response.ok("Your orders are :"+ result.toString()).build() ;
 
     }
-
-/* 
-    public Response processOrder(char vehicle) {
-        if (obj.status) {
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                public void run() {
-                    
-                    System.out.println("Processing order for vehicle: " + vehicle);
-                    obj.status = true; 
-                    timer.cancel();
-                
-                }
-            };
-            timer.schedule(task, calculateTotalTimeForLastItem());
-            obj.status=false;
-
-        }
-        return Response.ok("Machine busy").build()  ;
-    }
-
-    */
-
 
     @GET
     @Path("/total")
@@ -66,7 +43,7 @@ public class process {
                        
            if (vehicle == 'c' ) {
 
-                requiredTime =obj.getCarTime();
+                requiredTime +=obj.getCarTime();
                                
             } else if (vehicle == 't') {
                 requiredTime += obj.getTruckTime();
@@ -76,7 +53,7 @@ public class process {
                 requiredTime += obj.getChangeTime();
             }
 
-            lastVehicle = vehicle; 
+            lastVehicle = vehicle;
         }
         
         return Response.ok("Your total time is :"+ requiredTime).build() ;
@@ -104,39 +81,7 @@ private int calculateTotalTimeForLastItem() {
 
 
 
-    /* 
-    @GET
-    @Path("/total")
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response Totaltime()  {
-
-
     
-        int requiredTime = 0;
-        char lastVehicle = ' ';
-           
-        for (int i = 0; i < result.toString().toCharArray().length; i++) {
-            char vehicle = result.toString().toCharArray()[i];
-                       
-           if (vehicle == 'c' && obj.status==true  ) {
-
-                requiredTime =obj.getCarTime();
-                               
-            } else if (vehicle == 't') {
-                requiredTime += obj.getTruckTime();
-            }
-
-            if (i > 0 && lastVehicle != ' ' && lastVehicle != vehicle) {
-                requiredTime += obj.getChangeTime();
-            }
-
-            lastVehicle = vehicle; 
-        }
-        
-        return Response.ok("Your total time is :"+ requiredTime).build() ;
-        
-        
-    }    */
 
     Timer timer = new Timer();
 
@@ -144,6 +89,7 @@ private int calculateTotalTimeForLastItem() {
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postOrder(String input) {
+        long startTime = System.currentTimeMillis();
         if (!stopAppending) {
             if (obj.status == false) { // true=free
                 return Response.status(Response.Status.BAD_REQUEST)
@@ -166,6 +112,9 @@ private int calculateTotalTimeForLastItem() {
 
             if (input.contains("x")) {
                 stopAppending = true;
+                long stopTime = System.currentTimeMillis();
+                return Response.ok("Total elapsed time is  " + (stopTime-startTime)*100000).build();
+
             }
         }
     
