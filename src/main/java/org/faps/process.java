@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+
 @Path("/calculate")
 public class process {
 
@@ -89,7 +90,7 @@ private int calculateTotalTimeForLastItem() {
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postOrder(String input) {
-        long startTime = System.currentTimeMillis();
+        
         if (!stopAppending) {
             if (obj.status == false) { // true=free
                 return Response.status(Response.Status.BAD_REQUEST)
@@ -97,6 +98,8 @@ private int calculateTotalTimeForLastItem() {
             }
     
             result.append(input);
+            
+            long startTime = System.currentTimeMillis();
             obj.status = false;
     
             TimerTask task = new TimerTask() {
@@ -113,7 +116,8 @@ private int calculateTotalTimeForLastItem() {
             if (input.contains("x")) {
                 stopAppending = true;
                 long stopTime = System.currentTimeMillis();
-                return Response.ok("Total elapsed time is  " + (stopTime-startTime)*100000).build();
+                long difference = stopTime - startTime;
+                return Response.ok("Total elapsed time is  " +  difference).build();
 
             }
         }
