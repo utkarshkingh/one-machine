@@ -64,7 +64,7 @@ public class calculator {
         for (int i = 0; i < result.toString().toCharArray().length; i++) {
             char vehicle = result.toString().toCharArray()[i];
                        
-           if (vehicle == 'c' && obj.status==true  ) {
+           if (vehicle == 'c' ) {
 
                 requiredTime =obj.getCarTime();
                                
@@ -143,7 +143,7 @@ private int calculateTotalTimeForLastItem() {
 @Consumes(MediaType.TEXT_PLAIN)
 public Response postOrder(String input) {
     if (!stopAppending) {
-        if (obj.status==false) {
+        if (obj.status==false) {// true=free
             return Response.status(Response.Status.BAD_REQUEST).entity("Machine is busy. Please try again later.").build();
         }
 
