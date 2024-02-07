@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 
 @Path("/calculate")
-public class calculator {
+public class process {
 
      StringBuilder result = new StringBuilder();
      boolean stopAppending = false;
@@ -138,36 +138,39 @@ private int calculateTotalTimeForLastItem() {
         
     }    */
 
-@POST
-@Path("/postorder")
-@Consumes(MediaType.TEXT_PLAIN)
-public Response postOrder(String input) {
-    if (!stopAppending) {
-        if (obj.status==false) {// true=free
-            return Response.status(Response.Status.BAD_REQUEST).entity("Machine is busy. Please try again later.").build();
-        }
+    Timer timer = new Timer();
 
-        result.append(input); 
-
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            public void run() {
-                
-                obj.status=false; 
-                timer.cancel();                
+    @POST
+    @Path("/postorder")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response postOrder(String input) {
+        if (!stopAppending) {
+            if (obj.status == false) { // true=free
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Machine is busy. Please try again after " + calculateTotalTimeForLastItem() + " seconds").build();
             }
-        };
-      
-        timer.schedule(task,calculateTotalTimeForLastItem());
-        obj.status=true; 
+    
+            result.append(input);
+            obj.status = false;
+    
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    obj.status = true;
+                    this.cancel();
+                    
+                }
+            };
+    
+            timer.schedule(task, calculateTotalTimeForLastItem()*1000);
+            
 
-       
-        if (input.contains("x")) {
-            stopAppending = true;
+            if (input.contains("x")) {
+                stopAppending = true;
+            }
         }
+    
+        return Response.ok("Order received: " + input).build();
     }
-
-    return Response.ok("Order received: " + input).build(); 
-}
+    
 }
 
