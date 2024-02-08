@@ -57,7 +57,7 @@ public class process {
             lastVehicle = vehicle;
         }
         
-        return Response.ok("Your total time is :"+ requiredTime).build() ;
+        return Response.ok("Your total time is :"+ requiredTime+"hrs").build() ;
         
         
     }
@@ -90,16 +90,17 @@ private int calculateTotalTimeForLastItem() {
     @Path("/postorder")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response postOrder(String input) {
+        long startTime = System.nanoTime();
         
         if (!stopAppending) {
             if (obj.status == false) { // true=free
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("Machine is busy. Please try again after " + calculateTotalTimeForLastItem() + " seconds").build();
             }
-    
+            //long startTime = System.nanoTime();
             result.append(input);
             
-            long startTime = System.currentTimeMillis();
+            
             obj.status = false;
     
             TimerTask task = new TimerTask() {
@@ -115,9 +116,9 @@ private int calculateTotalTimeForLastItem() {
 
             if (input.contains("x")) {
                 stopAppending = true;
-                long stopTime = System.currentTimeMillis();
-                long difference = stopTime - startTime;
-                return Response.ok("Total elapsed time is  " +  difference).build();
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime);
+                return Response.ok("Total elapsed time is  " + duration).build();
 
             }
         }
