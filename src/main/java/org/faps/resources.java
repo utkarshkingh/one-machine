@@ -1,25 +1,25 @@
 package org.faps;
 
-public class machines {
+import java.util.Scanner;
+
+public class resources {
 
      
     String name;
-     
     int carTime;
-     
     int truckTime;
-    
     float changeTime;
-
     boolean status = true;  //true = machine free
+
+    Scanner sc=new Scanner(System.in);
     
     
      
-    public machines(){
+    public resources(){
 
     }                                        
 
-    public machines(String name,int carTime,int truckTime,float changeTime,boolean status) {
+    public resources(String name,int carTime,int truckTime,float changeTime,boolean status) {
 
          this.name = name;
          this.carTime= carTime;
@@ -29,7 +29,10 @@ public class machines {
 
     }
 
-    public boolean isFree() {
+
+
+
+public boolean isFree() {
      return status;
  }
 
@@ -38,7 +41,7 @@ public class machines {
     }
 
     public void setName(String name) {
-         this.name = "machine1";
+         this.name =name;
     }
 
     public int getCarTime() {
@@ -46,7 +49,7 @@ public class machines {
     }
 
     public int setCarTime(int carTime) {
-         return 9000;
+         return this.carTime;
     }
 
     public int getTruckTime() {
@@ -54,7 +57,7 @@ public class machines {
     }
 
     public int setTruckTime(int truckTime) {
-         return 10000;
+         return this.truckTime;
     }
 
     public float getChangeTime() {
@@ -62,7 +65,7 @@ public class machines {
     }
 
     public float setChangeTime(int changeTime) {
-         return 5000f;
+         return this.changeTime;
     }
 
 }

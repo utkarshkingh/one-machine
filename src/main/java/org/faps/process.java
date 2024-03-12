@@ -17,8 +17,8 @@ public class process {
 
      StringBuilder result = new StringBuilder();
      boolean stopAppending = false;
-     machines obj = new machines("machine1" ,4,7,1,true);
-    
+     resources machine1=new resources("machine1",2,4,0.5f,true);
+     resources machine2=new resources("machine2",3,5,1.5f,true);
     
 
     @GET
@@ -44,14 +44,14 @@ public class process {
                        
            if (vehicle == 'c' ) {
 
-                requiredTime +=obj.getCarTime();
+                requiredTime +=machine1.getCarTime();
                                
             } else if (vehicle == 't') {
-                requiredTime += obj.getTruckTime();
+                requiredTime += machine1.getTruckTime();
             }
 
             if (i > 0 && lastVehicle != ' ' && lastVehicle != vehicle) {
-                requiredTime += obj.getChangeTime();
+                requiredTime += machine1.getChangeTime();
             }
 
             lastVehicle = vehicle;
@@ -67,14 +67,14 @@ private int calculateTotalTimeForLastItem() {
     char lastVehicle = result.charAt(result.length() - 1); 
 
     if (lastVehicle == 'c') {
-        thisTime += obj.getCarTime();
+        thisTime += machine1.getCarTime();
     } else if (lastVehicle == 't') {
-        thisTime += obj.getTruckTime();
+        thisTime += machine1.getTruckTime();
     }
 
     
     if (result.length() >= 2 && result.charAt(result.length() - 2) == 'c' && lastVehicle == 't') {
-        thisTime +=  obj.getChangeTime() ; 
+        thisTime +=  machine1.getChangeTime() ; 
     }
 
     return thisTime;
@@ -93,7 +93,7 @@ private int calculateTotalTimeForLastItem() {
         long startTime = System.nanoTime();
         
         if (!stopAppending) {
-            if (obj.status == false) { // true=free
+            if (machine1.status == false) { // true=free
                 return Response.status(Response.Status.BAD_REQUEST)
                         .entity("Machine is busy. Please try again after " + calculateTotalTimeForLastItem() + " seconds").build();
             }
@@ -101,11 +101,11 @@ private int calculateTotalTimeForLastItem() {
             result.append(input);
             
             
-            obj.status = false;
+            machine1.status = false;
     
             TimerTask task = new TimerTask() {
                 public void run() {
-                    obj.status = true;
+                    machine1.status = true;
                     this.cancel();
                     
                 }
